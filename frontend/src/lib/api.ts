@@ -59,3 +59,24 @@ export async function visitSite(input: {
   const data = (await response.json()) as { site: Site };
   return data.site;
 }
+
+export type Visit = {
+  id: string;
+  address: string;
+  title: string | null;
+  via: Via;
+  visitedAt: string;
+};
+export async function getHistory(userId: string): Promise<Visit[]> {
+  const response = await fetch(
+    `${API_BASE_URL}/visit?userId=${encodeURIComponent(userId)}`,
+    { cache: "no-store" },
+  );
+
+  if (!response.ok) {
+    throw new Error("Internal server error");
+  }
+
+  const data = (await response.json()) as { visitors?: Visit[] };
+  return data.visitors ?? [];
+}

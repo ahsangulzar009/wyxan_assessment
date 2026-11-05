@@ -9,6 +9,7 @@ import { visitSite, type Site, type Via } from "@/lib/api";
 
 import NotFound from "./_component/NotFound";
 import SiteFrame from "./_component/SiteFrame";
+import HistoryDialog from "./_component/HistoryDialog";
 
 type Entry = { address: string; site: Site | null };
 
@@ -17,6 +18,7 @@ export default function Home() {
   const [trail, setTrail] = useState<Entry[]>([]);
   const [cursor, setCursor] = useState(-1);
   const [pending, setPending] = useState<string | null>(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   const current = trail[cursor] ?? null;
   const site = current?.site ?? null;
@@ -101,6 +103,7 @@ export default function Home() {
         canGoForward={cursor < trail.length - 1}
         onBack={() => goToEntry(cursor - 1)}
         onForward={() => goToEntry(cursor + 1)}
+        onOpenHistory={() => setHistoryOpen(true)}
       />
 
       <main className="flex flex-1 flex-col">
@@ -113,11 +116,11 @@ export default function Home() {
                 html={site.html}
                 onFollow={(next) => goTo(next, "link")}
               />
-              {pending ? (
+              {pending && (
                 <span className="absolute right-3 top-3 rounded-full bg-foreground/80 px-3 py-1 text-[11px] font-medium text-background backdrop-blur">
                   asking {pending}…
                 </span>
-              ) : null}
+              )}
             </div>
           </div>
         ) : pending ? (
@@ -150,6 +153,16 @@ export default function Home() {
           </div>
         )}
       </main>
+
+      <HistoryDialog
+        open={historyOpen}
+        onOpenChange={setHistoryOpen}
+        currentUserId={currentUser?.id}
+        onOpenAddress={(next) => {
+          setHistoryOpen(false);
+          void goTo(next, "history");
+        }}
+      />
     </div>
   );
 }

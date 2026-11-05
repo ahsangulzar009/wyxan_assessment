@@ -206,7 +206,7 @@ export default function Header({
                 onClear?.();
                 addressRef.current?.focus();
               }}
-              className="absolute right-13 top-1/2 -translate-y-1/2 rounded-full text-muted-foreground hover:text-foreground"
+              className="absolute cursor-pointer right-13 top-1/2 -translate-y-1/2 rounded-full text-muted-foreground hover:text-foreground"
             >
               <X className="size-3.5" />
             </Button>
@@ -221,7 +221,6 @@ export default function Header({
           </Button>
         </form>
 
-        {/* Search */}
         <form
           onSubmit={handleSearchSubmit}
           className="relative hidden w-52 shrink-0 lg:block xl:w-72"
