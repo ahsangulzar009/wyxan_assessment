@@ -21,7 +21,7 @@ export default function Highlight({
         matched.test(part) ? (
           <mark
             key={at}
-            className="rounded-sm bg-foreground/12 px-0.5 text-foreground"
+            className="rounded-sm bg-yellow-200 px-0.5 text-foreground"
           >
             {part}
           </mark>
