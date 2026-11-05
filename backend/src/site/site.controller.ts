@@ -1,9 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
-import { SitesService } from './site.service.js';
+import { Controller, Get, Query } from '@nestjs/common';
+import { SiteService } from './site.service.js';
+
 
 @Controller('sites')
-export class SitesController {
-  constructor(private readonly sitesService: SitesService){}
+export class SiteController {
+  constructor(private readonly siteService: SiteService){}
 
- 
+
+  @Get('search')
+  search(@Query('q') q: string) {
+    return this.siteService.search(q);
+  }
 }
