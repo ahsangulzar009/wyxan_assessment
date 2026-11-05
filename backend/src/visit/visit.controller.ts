@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { VisitService } from './visit.service.js';
 
 @Controller('visit')
@@ -7,6 +7,14 @@ export class VisitController {
 
   @Post()
   async visit(@Body() body: { userId: string; address: string; via: string }) {
-    return this.visitService.visit(body);
+    const site = await this.visitService.visit(body);
+    return {site} 
   }
+
+  @Get()
+  async history(@Query('userId') userId: string) {
+    const visitors = await this.visitService.history(userId);
+    return { visitors }
+  }
+
 }

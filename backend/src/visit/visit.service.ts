@@ -12,11 +12,14 @@ export class VisitService {
   }
 
   async visit(body: { userId: string; address: string; via: string }) {
-    const address = body.address.trim().toLowerCase();
-
     if (!body.userId || !mongoose.isValidObjectId(body.userId))
       throw new BadRequestException('Valid user is required');
-    if (!address) throw new BadRequestException('address is required');
+
+    if (typeof body.address !== 'string' || !body.address.trim())
+      throw new BadRequestException('address is required');
+
+    const address = body.address.trim().toLowerCase();
+    
     if (!this.isVia(body.via))
       throw new BadRequestException(`via must be one of: ${VIA.join(', ')}`);
 
@@ -29,6 +32,32 @@ export class VisitService {
     if (!site) throw new NotFoundException(`No such address: ${address}`);
 
     return site
+
+  }
+
+  async history(userId: string) {
+    if (!userId || !mongoose.isValidObjectId(userId))
+      throw new BadRequestException('Valid user is required');
+
+    const visits = await Visit.find({ user: userId })
+      .sort({ visitedAt: -1 })
+      .limit(200)
+      .lean();
+
+    const addresses = [...new Set(visits.map((v) => v.address))];
+    const sites = await Site.find({ address: { $in: addresses } })
+      .select('address title')
+      .lean();
+
+    const titleBy = new Map(sites.map((s) => [s.address, s.title]));
+
+    return visits.map((v) => ({
+      id: v._id,
+      address: v.address,
+      title: titleBy.get(v.address) ?? null,
+      via: v.via,
+      visitedAt: v.visitedAt.toISOString(),
+    }));
 
   }
 }
