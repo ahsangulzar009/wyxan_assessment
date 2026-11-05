@@ -8,6 +8,7 @@ import Header, { type BrowserUser } from "@/components/Header";
 import { visitSite, type Site, type Via } from "@/lib/api";
 
 import NotFound from "./_component/NotFound";
+import SiteFrame from "./_component/SiteFrame";
 
 type Entry = { address: string; site: Site | null };
 
@@ -106,13 +107,11 @@ export default function Home() {
         {site ? (
           <div className="mx-auto mt-3 w-[95%] max-w-375">
             <div className="relative h-[calc(100dvh-6rem)] overflow-hidden rounded-2xl border border-border/70 bg-white shadow-sm">
-              <iframe
+              <SiteFrame
                 key={site.address}
                 title={site.title}
-                srcDoc={site.html}
-                sandbox=""
-                referrerPolicy="no-referrer"
-                className="h-full w-full border-0"
+                html={site.html}
+                onFollow={(next) => goTo(next, "link")}
               />
               {pending ? (
                 <span className="absolute right-3 top-3 rounded-full bg-foreground/80 px-3 py-1 text-[11px] font-medium text-background backdrop-blur">

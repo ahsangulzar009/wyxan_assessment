@@ -5,11 +5,9 @@ export type User = {
   id: string;
   name: string;
 };
-
 type UsersResponse = {
   users: Array<{ _id: string; name: string }>;
 };
-
 
 export async function getUsers(): Promise<User[]> {
   try {
