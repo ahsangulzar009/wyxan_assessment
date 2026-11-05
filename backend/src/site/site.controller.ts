@@ -4,11 +4,12 @@ import { SiteService } from './site.service.js';
 
 @Controller('sites')
 export class SiteController {
-  constructor(private readonly siteService: SiteService){}
+  constructor(private readonly siteService: SiteService) { }
 
 
   @Get('search')
-  search(@Query('q') q: string) {
-    return this.siteService.search(q);
+  async search(@Query('q') q: string) {
+    const sites = await this.siteService.search(q);
+    return { sites }
   }
 }
