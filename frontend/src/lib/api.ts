@@ -100,3 +100,36 @@ export async function searchSites(query: string): Promise<SearchResult[]> {
   const data = (await response.json()) as { sites?: SearchResult[] };
   return data.sites ?? [];
 }
+
+
+export async function publishSite(input: {
+  authorId: string;
+  address: string;
+  title: string;
+  html: string;
+}): Promise<{ address: string; message: string }> {
+  const response = await fetch(`${API_BASE_URL}/sites/publish`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+
+  const data = (await response.json().catch(() => null)) as {
+    message: string | string[];
+    site: { address: string };
+  };
+
+  if (!response.ok) {
+    const message = data?.message;
+    throw new Error(
+      Array.isArray(message)
+        ? message.join(", ")
+        : (message ?? "Internal server error"),
+    );
+  }
+
+  return {
+    address: data?.site?.address ?? input.address,
+    message: typeof data?.message === "string" ? data.message : "Published.",
+  };
+}

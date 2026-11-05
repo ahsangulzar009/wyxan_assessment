@@ -10,6 +10,7 @@ import { searchSites, visitSite, type SearchResult, type Site, type Via } from "
 import NotFound from "./_component/NotFound";
 import SiteFrame from "./_component/SiteFrame";
 import HistoryDialog from "./_component/HistoryDialog";
+import PublishDialog from "./_component/PublishDialog";
 
 type Entry = { address: string; site: Site | null };
 
@@ -19,6 +20,7 @@ export default function Home() {
   const [cursor, setCursor] = useState(-1);
   const [pending, setPending] = useState<string | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [publishOpen, setPublishOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[] | null>(null);
 
@@ -125,6 +127,7 @@ export default function Home() {
         onBack={() => goToEntry(cursor - 1)}
         onForward={() => goToEntry(cursor + 1)}
         onOpenHistory={() => setHistoryOpen(true)}
+        onOpenPublish={() => setPublishOpen(true)}
         onSearch={runSearch}
         searchResults={results}
         searchQuery={query}
@@ -190,6 +193,16 @@ export default function Home() {
         onOpenAddress={(next) => {
           setHistoryOpen(false);
           void goTo(next, "history");
+        }}
+      />
+
+      <PublishDialog
+        open={publishOpen}
+        onOpenChange={setPublishOpen}
+        currentUserId={currentUser?.id}
+        onPublished={(next) => {
+          setPublishOpen(false);
+          void goTo(next, "typed");
         }}
       />
     </div>

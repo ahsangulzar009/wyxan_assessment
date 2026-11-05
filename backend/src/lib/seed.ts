@@ -21,14 +21,23 @@ export function extractText(html: string) {
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/smallweb';
 
 
-const USERS = ['nora', 'mira', 'ines', 'june', 'sameer', 'tomas', 'ravi', 'sana'];
+const USERS = [
+  'Ahsan Gulzar',
+  'Zoha Naeem',
+  'Hamza Tariq',
+  'Ayesha Siddiqui',
+  'Bilal Ahmed',
+  'Mehwish Ali',
+  'Usman Khalid',
+  'Fatima Raza',
+];
 
 
 const PAGES = [
   {
     address: 'littlelamp.zz',
     title: 'Little Lamp',
-    authorName: 'june',
+    authorName: 'Ahsan Gulzar',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,7 +75,7 @@ const PAGES = [
   {
     address: 'tidepool.zz',
     title: 'Tidepool',
-    authorName: 'nora',
+    authorName: 'Zoha Naeem',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,7 +109,7 @@ const PAGES = [
   {
     address: 'reefnotes.zz',
     title: 'Reef Notes',
-    authorName: 'mira',
+    authorName: 'Hamza Tariq',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -134,7 +143,7 @@ const PAGES = [
   {
     address: 'saltbread.zz',
     title: 'Salt Bread',
-    authorName: 'ines',
+    authorName: 'Ayesha Siddiqui',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -168,7 +177,7 @@ const PAGES = [
   {
     address: 'palelight.zz',
     title: 'Pale Light',
-    authorName: 'june',
+    authorName: 'Bilal Ahmed',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -202,7 +211,7 @@ const PAGES = [
   {
     address: 'quietbell.zz',
     title: 'Quiet Bell',
-    authorName: 'sameer',
+    authorName: 'Mehwish Ali',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -237,7 +246,7 @@ const PAGES = [
   {
     address: 'slowriver.zz',
     title: 'Slow River',
-    authorName: 'tomas',
+    authorName: 'Usman Khalid',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -271,7 +280,7 @@ const PAGES = [
   {
     address: 'halfmoon.zz',
     title: 'Half Moon',
-    authorName: 'ravi',
+    authorName: 'Fatima Raza',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -305,7 +314,7 @@ const PAGES = [
   {
     address: 'firstsnow.zz',
     title: 'First Snow',
-    authorName: 'sana',
+    authorName: 'Hamza Tariq',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -339,7 +348,7 @@ const PAGES = [
   {
     address: 'smallfire.zz',
     title: 'Small Fire',
-    authorName: 'sameer',
+    authorName: 'Ahsan Gulzar',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -373,7 +382,7 @@ const PAGES = [
   {
     address: 'drycreek.zz',
     title: 'Dry Creek',
-    authorName: 'tomas',
+    authorName: 'Zoha Naeem',
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
