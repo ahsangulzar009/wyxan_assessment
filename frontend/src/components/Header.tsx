@@ -39,6 +39,7 @@ type HeaderProps = {
   onSearch?: (query: string) => void;
   currentUser?: BrowserUser;
   onSelectUser?: (user: BrowserUser) => void;
+  onClear?: () => void;
   onOpenHistory?: () => void;
   onOpenPublish?: () => void;
 };
@@ -73,6 +74,7 @@ export default function Header({
   onSearch,
   currentUser,
   onSelectUser,
+  onClear,
   onOpenHistory,
   onOpenPublish,
 }: HeaderProps) {
@@ -106,6 +108,13 @@ export default function Header({
   const activeUser =
     users.find((person) => person.id === activeUserId) ?? users[0];
 
+  const selectUserRef = useRef(onSelectUser);
+  selectUserRef.current = onSelectUser;
+
+  useEffect(() => {
+    if (activeUser) selectUserRef.current?.(activeUser);
+  }, [activeUser]);
+
   function handleAddressSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const next = addressDraft.trim();
@@ -121,14 +130,11 @@ export default function Header({
   }
 
   function handleUserChange(value: unknown) {
-    const nextId = String(value);
-    setPickedUserId(nextId);
-    const nextUser = users.find((person) => person.id === nextId);
-    if (nextUser) onSelectUser?.(nextUser);
+    setPickedUserId(String(value));
   }
 
   return (
-    <header className="sticky top-3 z-40 mx-auto w-[95%] max-w-375">
+    <header className="sticky top-3 z-40 mx-auto mt-3 w-[95%] max-w-375">
       <div className="flex h-14 items-center gap-1.5 rounded-2xl border border-border/70 bg-background/75 px-2 shadow-[0_1px_2px_rgba(16,24,32,0.04),0_12px_28px_-16px_rgba(16,24,32,0.25)] backdrop-blur-xl supports-backdrop-filter:bg-background/60 sm:gap-2 sm:px-3">
         {/* Back / forward */}
         <div className="flex shrink-0 items-center gap-0.5">
@@ -171,7 +177,6 @@ export default function Header({
 
         <div className="mx-0.5 hidden h-5 w-px shrink-0 bg-border sm:block" />
 
-        {/* Address bar */}
         <form onSubmit={handleAddressSubmit} className="relative min-w-0 flex-1">
           <Globe2 className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -183,9 +188,14 @@ export default function Header({
             autoComplete="off"
             autoCapitalize="none"
             spellCheck={false}
+            onKeyDown={(event) => {
+              if (event.key !== "Enter") return;
+              event.preventDefault();
+              event.currentTarget.form?.requestSubmit();
+            }}
             className="h-9 rounded-full border-transparent bg-muted/60 pl-9 pr-20 text-sm shadow-inner shadow-black/3 transition-colors placeholder:text-muted-foreground/70 focus-visible:border-ring/60 focus-visible:bg-background focus-visible:ring-4 focus-visible:ring-ring/15 dark:bg-muted/40 dark:focus-visible:bg-background"
           />
-          {addressDraft ? (
+          {addressDraft && (
             <Button
               type="button"
               variant="ghost"
@@ -193,13 +203,14 @@ export default function Header({
               aria-label="Clear address"
               onClick={() => {
                 setAddressDraft("");
+                onClear?.();
                 addressRef.current?.focus();
               }}
               className="absolute right-13 top-1/2 -translate-y-1/2 rounded-full text-muted-foreground hover:text-foreground"
             >
               <X className="size-3.5" />
             </Button>
-          ) : null}
+          )}
           <Button
             type="submit"
             size="xs"
@@ -223,6 +234,11 @@ export default function Header({
             placeholder="Search the web"
             autoComplete="off"
             spellCheck={false}
+            onKeyDown={(event) => {
+              if (event.key !== "Enter") return;
+              event.preventDefault();
+              event.currentTarget.form?.requestSubmit();
+            }}
             className="h-9 rounded-full border-transparent bg-muted/60 pl-9 pr-3 text-sm shadow-inner shadow-black/3 transition-colors placeholder:text-muted-foreground/70 focus-visible:border-ring/60 focus-visible:bg-background focus-visible:ring-4 focus-visible:ring-ring/15 dark:bg-muted/40 dark:focus-visible:bg-background"
           />
         </form>
