@@ -300,7 +300,7 @@ export default function Header({
                   Nothing matches “{searchQuery}”.
                 </p>
               ) : (
-                <ul className="max-h-112 overflow-y-auto p-1 [scrollbar-color:var(--muted-foreground)_transparent] [scrollbar-width:thin]">
+                <ul className="max-h-112 overflow-y-auto p-1 [scrollbar-color:var(--muted-foreground)_transparent] scrollbar-thin">
                   {searchResults.map((result) => (
                     <li key={result.address}>
                       <button
