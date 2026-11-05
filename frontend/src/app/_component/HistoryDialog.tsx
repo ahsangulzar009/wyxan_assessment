@@ -149,7 +149,7 @@ export default function HistoryDialog({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className="-mx-1 max-h-[60vh] space-y-0.5 overflow-y-auto px-1">
+        <div className="-mx-1 max-h-[60vh] space-y-0.5 overflow-y-auto px-1 [scrollbar-color:var(--muted-foreground)_transparent] scrollbar-thin">
           {loading ? (
             <p className="py-8 text-center text-xs text-muted-foreground">
               Loading…

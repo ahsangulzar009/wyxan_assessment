@@ -80,3 +80,23 @@ export async function getHistory(userId: string): Promise<Visit[]> {
   const data = (await response.json()) as { visitors?: Visit[] };
   return data.visitors ?? [];
 }
+
+export type SearchResult = {
+  address: string;
+  title: string;
+  snippet: string;
+};
+
+export async function searchSites(query: string): Promise<SearchResult[]> {
+  const response = await fetch(
+    `${API_BASE_URL}/sites/search?q=${encodeURIComponent(query)}`,
+    { cache: "no-store" },
+  );
+
+  if (!response.ok) {
+    throw new Error("Internal server error");
+  }
+
+  const data = (await response.json()) as { sites?: SearchResult[] };
+  return data.sites ?? [];
+}

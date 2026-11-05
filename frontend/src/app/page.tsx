@@ -5,7 +5,7 @@ import { Compass } from "lucide-react";
 import { toast } from "sonner";
 
 import Header, { type BrowserUser } from "@/components/Header";
-import { visitSite, type Site, type Via } from "@/lib/api";
+import { searchSites, visitSite, type SearchResult, type Site, type Via } from "@/lib/api";
 
 import NotFound from "./_component/NotFound";
 import SiteFrame from "./_component/SiteFrame";
@@ -19,6 +19,8 @@ export default function Home() {
   const [cursor, setCursor] = useState(-1);
   const [pending, setPending] = useState<string | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<SearchResult[] | null>(null);
 
   const current = trail[cursor] ?? null;
   const site = current?.site ?? null;
@@ -51,6 +53,7 @@ export default function Home() {
     const wanted = next.trim().toLowerCase();
     if (!wanted || !currentUser || pending) return;
 
+    setResults(null);
     setPending(wanted);
 
     try {
@@ -87,9 +90,27 @@ export default function Home() {
     })
   }
 
+  async function runSearch(next: string) {
+    const wanted = next.trim();
+    if (!wanted) return;
+
+    setQuery(wanted);
+
+    try {
+      setResults(await searchSites(wanted));
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Internal server error",
+        { description: wanted },
+      );
+    }
+  }
+
   function backToStart() {
     setTrail([]);
     setCursor(-1);
+    setResults(null);
+    setQuery("");
   }
 
   return (
@@ -104,6 +125,14 @@ export default function Home() {
         onBack={() => goToEntry(cursor - 1)}
         onForward={() => goToEntry(cursor + 1)}
         onOpenHistory={() => setHistoryOpen(true)}
+        onSearch={runSearch}
+        searchResults={results}
+        searchQuery={query}
+        onOpenResult={(next) => {
+          setResults(null);
+          void goTo(next, "search");
+        }}
+        onCloseResults={() => setResults(null)}
       />
 
       <main className="flex flex-1 flex-col">
